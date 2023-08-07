@@ -9,4 +9,4 @@ exports.config = {
     database: process.env.DB_DATABASE || "bd_de_pruebas",
 };
 exports.CORS_VALID_ORIGIN = process.env.VALID_ORIGIN || "http://localhost:5173";
-exports.port = process.env.PORT ? parseInt(process.env.PORT) : 4000;
+exports.port = process.env.PORT ? parseInt(process.env.PORT) : 4500;
