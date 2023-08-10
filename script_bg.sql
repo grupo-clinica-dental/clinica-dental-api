@@ -1,12 +1,6 @@
--- Active: 1690505574728@@localhost@5432@db_clinica_imagen_dental@public
 
--- Active: 1690505574728@@localhost@5432@db_clinica@public
 
--- Active: 1690505574728@@localhost@5432@db_clinica@public
-
--- Active: 1690505574728@@localhost@5432
-
-CREATE DATABASE db_clinica_imagen_dental;
+CREATE DATABASE clinica; 
 
 CREATE TABLE
     tbl_roles (

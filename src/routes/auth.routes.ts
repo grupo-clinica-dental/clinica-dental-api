@@ -5,8 +5,10 @@ import { requireAuth } from "../middlewares/require.-auth.middleware";
 
 const router = Router();
 
-router.post("/login", loginHandler);
-
 router.get("/profile", requireAuth, profileHandler);
+
+router.post("/login", loginHandler );
+
+
 
 export default router;
