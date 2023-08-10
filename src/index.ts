@@ -19,7 +19,7 @@ app.use(
 app.use(apiVersion, testRoutes);
 app.use(apiVersion, authRoutes);
 
-const port = 4000;
+const port = 4500;
 
 app.listen(port, () => {
   console.log(`started development server: http://localhost:${port}/api/v1`);
