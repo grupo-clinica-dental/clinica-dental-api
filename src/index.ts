@@ -24,6 +24,11 @@ app.use(
 app.use(API_VERSION, testRoutes);
 app.use(API_VERSION, authRoutes);
 app.use(API_VERSION, googleCalendarRoutes);
+=======
+app.use(apiVersion, testRoutes);
+app.use(apiVersion, authRoutes);
+
+
 
 app.listen(PORT, () => {
   console.log(`started development server: http://localhost:${PORT}/api/v1`);
