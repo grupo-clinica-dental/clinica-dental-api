@@ -11,4 +11,6 @@ const pool = new pg.Pool({
 
 pool.on("connect", () => console.log("Db Connected"));
 
+pool.on("error", (e) => console.log(e));
+
 export default pool;

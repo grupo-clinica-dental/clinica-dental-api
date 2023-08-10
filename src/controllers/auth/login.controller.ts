@@ -33,6 +33,12 @@ export const loginHandler = async (req: Request, res: Response) => {
       }
     );
 
+    // TODO TOKEN guardar en base de datos id de sesion que usuario esta con el token
+
+    // una vez guardado en la base de datos
+
+    // retornar el token
+
     return res.json({ token });
   } catch (error) {
     console.log(error);

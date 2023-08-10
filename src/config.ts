@@ -10,11 +10,11 @@ export const config: ConfigInterface = {
   user: process.env.DB_USER || "postgres",
   password: process.env.DB_PASSWORD || "D@ns3r190s",
   host: process.env.DB_HOST || "localhost",
-  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : undefined,
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
   database: process.env.DB_DATABASE || "bd_de_pruebas",
 };
 
 export const CORS_VALID_ORIGIN =
   process.env.VALID_ORIGIN || "http://localhost:5173";
 
-export const port = process.env.PORT ? parseInt(process.env.PORT) : 4500;
+export const PORT = process.env.PORT ? parseInt(process.env.PORT) : 4500;

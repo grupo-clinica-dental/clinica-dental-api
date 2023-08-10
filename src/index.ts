@@ -1,9 +1,13 @@
 import express, { Application } from "express";
 import testRoutes from "./routes/test";
 import authRoutes from "./routes/auth.routes";
+import googleCalendarRoutes from "./routes/google-calendar.routes";
+
+// lo que se exporta por defecto se usa en la ruta
+
 import cors from "cors";
-import { CORS_VALID_ORIGIN } from "./config";
-const apiVersion = "/api/v1";
+import { CORS_VALID_ORIGIN, PORT } from "./config";
+const API_VERSION = "/api/v1";
 
 const app: Application = express();
 
@@ -16,11 +20,16 @@ app.use(
   })
 );
 
+// usamos las rutas definidas arriba que estan en nuestro archivo de routes
+app.use(API_VERSION, testRoutes);
+app.use(API_VERSION, authRoutes);
+app.use(API_VERSION, googleCalendarRoutes);
+=======
 app.use(apiVersion, testRoutes);
 app.use(apiVersion, authRoutes);
 
-const port = 4500;
 
-app.listen(port, () => {
-  console.log(`started development server: http://localhost:${port}/api/v1`);
+
+app.listen(PORT, () => {
+  console.log(`started development server: http://localhost:${PORT}/api/v1`);
 });

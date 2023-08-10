@@ -10,6 +10,8 @@ export const requireAuth = (
 
   // debe ir en los headers de la solicitud
 
+  // validar base de datos si el token esta activo
+
   if (!authHeader)
     return res.status(401).json({
       message: "Unathorized",
