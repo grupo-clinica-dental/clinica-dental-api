@@ -1,4 +1,12 @@
-CREATE DATABASE DB_CLINICA;
+-- Active: 1690505574728@@localhost@5432@db_clinica_imagen_dental@public
+
+-- Active: 1690505574728@@localhost@5432@db_clinica@public
+
+-- Active: 1690505574728@@localhost@5432@db_clinica@public
+
+-- Active: 1690505574728@@localhost@5432
+
+CREATE DATABASE db_clinica_imagen_dental;
 
 CREATE TABLE
     tbl_roles (
@@ -13,9 +21,17 @@ CREATE TABLE
         email VARCHAR(100) NOT NULL UNIQUE,
         telefono VARCHAR(15),
         password VARCHAR(255) NOT NULL,
-        rol_id INTEGER NOT NULL REFERENCES tbl_roles(id),
         fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         estado BOOLEAN DEFAULT TRUE
+    );
+
+CREATE TABLE
+    tbl_roles_usuarios (
+        rol_id INTEGER NOT NULL,
+        usuario_id INTEGER NOT NULL,
+        PRIMARY KEY (rol_id, usuario_id),
+        FOREIGN KEY (rol_id) REFERENCES tbl_roles(id),
+        FOREIGN KEY (usuario_id) REFERENCES tbl_usuarios(id)
     );
 
 CREATE TABLE
