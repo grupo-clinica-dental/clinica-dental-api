@@ -17,4 +17,4 @@ export const config: ConfigInterface = {
 export const CORS_VALID_ORIGIN =
   process.env.VALID_ORIGIN || "http://localhost:5173";
 
-export const port = process.env.PORT ? parseInt(process.env.PORT) : 4500;
+export const PORT = process.env.PORT ? parseInt(process.env.PORT) : 4500;
