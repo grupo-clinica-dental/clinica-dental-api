@@ -6,7 +6,7 @@ interface ConfigInterface {
   database: string;
 }
 
-export const config: ConfigInterface = {
+export const DB_CONFIG: ConfigInterface = {
   user: process.env.DB_USER || "postgres",
   password: process.env.DB_PASSWORD || "D@ns3r190s",
   host: process.env.DB_HOST || "localhost",
