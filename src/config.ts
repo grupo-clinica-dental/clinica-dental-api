@@ -11,7 +11,7 @@ export const DB_CONFIG: ConfigInterface = {
   password: process.env.DB_PASSWORD || "D@ns3r190s",
   host: process.env.DB_HOST || "localhost",
   port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
-  database: process.env.DB_DATABASE || "bd_de_pruebas",
+  database: process.env.DB_DATABASE || "clinica",
 };
 
 export const CORS_VALID_ORIGIN =
