@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { getNewResponseApi } from "../../libs/create-new-api-response";
-import pool from "../../database";
+import pool from "../../../database";
+import { getNewResponseApi } from "../../../libs/create-new-api-response";
 
-export const getAllPatients = async (
+export const getAllTypes = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -10,15 +10,8 @@ export const getAllPatients = async (
   const response = getNewResponseApi();
 
   try {
-    const query = "SELECT * FROM tbl_pacientes WHERE estado = TRUE";
+    const query = "SELECT * FROM tbl_tipos_mensajes WHERE estado = TRUE";
     const result = await pool.query(query);
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({
-        ...response,
-        message: "No se encontraron pacientes.",
-      });
-    }
 
     return res.status(200).json({
       ...response,
@@ -29,7 +22,8 @@ export const getAllPatients = async (
     console.error(error);
     return res.status(500).json({
       ...response,
-      message: "Error al obtener los pacientes.",
+      succeded: false,
+      message: "Error al obtener los tipos de mensajes.",
       errors: [error],
     });
   }

@@ -41,7 +41,7 @@ export const createRole = async (
 
     return res.status(201).json({
       ...response,
-      success: true,
+      succeded: true,
       message: "Rol creado exitosamente.",
       data: newRole.rows[0],
     });

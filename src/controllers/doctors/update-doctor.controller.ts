@@ -36,7 +36,7 @@ export const updateDoctor = async (
 
     return res.status(200).json({
       ...response,
-      success: true,
+      succeded: true,
       message: "Doctor actualizado con éxito.",
     });
   } catch (error) {

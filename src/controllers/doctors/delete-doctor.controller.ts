@@ -35,7 +35,7 @@ export const deleteDoctor = async (
 
     return res.status(200).json({
       ...response,
-      success: true,
+      succeded: true,
       message: "Doctor eliminado con éxito.",
     });
   } catch (error) {

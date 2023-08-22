@@ -35,7 +35,7 @@ export const deleteRole = async (
 
     return res.status(200).json({
       ...response,
-      success: true,
+      succeded: true,
       message: "Rol eliminado exitosamente.",
     });
   } catch (error) {

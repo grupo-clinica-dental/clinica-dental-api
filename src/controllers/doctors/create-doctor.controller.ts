@@ -51,7 +51,7 @@ export const createDoctor = async (
 
     return res.status(201).json({
       ...response,
-      success: true,
+      succeded: true,
       message: "Doctor creado con éxito.",
       data: { id: doctorId },
     });

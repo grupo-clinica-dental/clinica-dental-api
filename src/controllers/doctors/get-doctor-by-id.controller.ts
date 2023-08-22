@@ -54,7 +54,7 @@ export const getDoctorById = async (
 
     return res.status(200).json({
       ...response,
-      success: true,
+      succeded: true,
       data: doctor,
     });
   } catch (error) {

@@ -15,7 +15,7 @@ export const getAllRoles = async (
 
     return res.status(200).json({
       ...response,
-      success: true,
+      succeded: true,
       data: result.rows,
     });
   } catch (error) {

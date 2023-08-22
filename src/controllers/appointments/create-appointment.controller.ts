@@ -78,7 +78,7 @@ export const createAppointmentHandler = async (
     return res.status(201).json({
       ...response,
       message: "Cita y mensajes creados con éxito.",
-      success: true,
+      succeded: true,
       data: { id: citaId },
     });
   } catch (error) {

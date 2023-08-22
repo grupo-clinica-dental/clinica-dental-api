@@ -7,6 +7,7 @@ import specialtiesRoutes from "./routes/specialties/doctors-specialties.routes";
 import doctorsRoutes from "./routes/doctors/doctors.routes";
 import rolesRoutes from "./routes/roles/roles.routes";
 import patientsRoutes from "./routes/patients/patients.routes";
+import messagesRoutes from "./routes/messages/messages.routes";
 
 // lo que se exporta por defecto se usa en la ruta
 
@@ -34,6 +35,7 @@ app.use(API_VERSION, specialtiesRoutes);
 app.use(API_VERSION, doctorsRoutes);
 app.use(API_VERSION, rolesRoutes);
 app.use(API_VERSION, patientsRoutes);
+app.use(API_VERSION, messagesRoutes);
 
 app.listen(PORT, () => {
   console.log(`started development server: http://localhost:${PORT}/api/v1`);

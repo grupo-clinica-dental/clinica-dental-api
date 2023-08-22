@@ -9,6 +9,8 @@ export const isAdminOrDoctor = async (
 ) => {
   const response = getNewResponseApi();
 
+  const validRoles = [ROLES.DOCTOR, ROLES.ADMIN];
+
   try {
     const user = req.user;
 
@@ -18,10 +20,12 @@ export const isAdminOrDoctor = async (
         message: "No se pudo encontrar un usuario en la solicitud",
       });
     }
-    if (user.rol === ROLES.DOCTOR || user.rol === ROLES.ADMIN) {
+
+    if (validRoles.includes(user.rol)) {
       next();
       return;
     }
+
     return res.status(403).json({
       ...response,
       message: "No tiene permisos de administrador ni de doctor",

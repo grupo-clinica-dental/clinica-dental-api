@@ -41,7 +41,7 @@ export const updateRole = async (
 
     return res.status(200).json({
       ...response,
-      success: true,
+      succeded: true,
       message: "Rol actualizado exitosamente.",
     });
   } catch (error) {

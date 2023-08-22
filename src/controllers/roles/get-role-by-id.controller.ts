@@ -34,7 +34,7 @@ export const getRoleById = async (
 
     return res.status(200).json({
       ...response,
-      success: true,
+      succeded: true,
       data: result.rows[0],
     });
   } catch (error) {

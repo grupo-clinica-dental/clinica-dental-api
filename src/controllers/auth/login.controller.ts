@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 import pool from "../../database";
 import { getNewResponseApi } from "../../libs/create-new-api-response";
-import { User } from "../../types/user/user.interface";
 
 export const loginHandler = async (req: Request, res: Response) => {
   const response = getNewResponseApi<string>();

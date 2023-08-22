@@ -104,7 +104,7 @@ export const getAppointmentById = async (
 
     return res.status(200).json({
       ...response,
-      success: true,
+      succeded: true,
       data: appointment,
     });
   } catch (error) {
