@@ -6,10 +6,11 @@ import { getRoleById } from "../../controllers/roles/get-role-by-id.controller";
 import { deleteRole } from "../../controllers/roles/delete-role.controller";
 import { updateRole } from "../../controllers/roles/update-role.controller";
 import { createRole } from "../../controllers/roles/create-role.controller";
+import { isAdminOrDoctor } from "../../middlewares/permissions/isAdminOrDoctor";
 
 const router = Router();
 
-router.get("/roles", [requireAuth, isAdmin], getAllRoles);
+router.get("/roles", [requireAuth, isAdminOrDoctor], getAllRoles);
 router.get("/roles/:id", [requireAuth, isAdmin], getRoleById);
 router.delete("/roles/:id", [requireAuth, isAdmin], deleteRole);
 router.put("/roles/:id", [requireAuth, isAdmin], updateRole);

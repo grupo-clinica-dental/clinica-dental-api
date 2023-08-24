@@ -50,6 +50,8 @@ export const getAppointmentById = async (
 
     const citaResult = await pool.query(getCitaQuery, [appointmentId]);
 
+    // ... Otras partes del código ...
+
     const row = citaResult.rows[0];
 
     if (!row) {
@@ -58,54 +60,56 @@ export const getAppointmentById = async (
     }
 
     const getMensajesQuery = `
-      SELECT 
-        cm.cita_id,
-        tm.tipo,
-        cm.fecha_programada,
-        em.nombre AS estado_mensaje_nombre
-      FROM tbl_citas_mensajes cm
-      JOIN tbl_tipos_mensajes tm ON cm.tipo_mensaje_id = tm.id
-      JOIN tbl_estados_mensajes em ON cm.id_estado_mensaje = em.id
-      WHERE cm.cita_id = $1
-    `;
+  SELECT 
+    cm.cita_id,
+    tm.tipo,
+    cm.fecha_programada,
+    em.nombre AS estado_mensaje_nombre
+  FROM tbl_citas_mensajes cm
+  JOIN tbl_tipos_mensajes tm ON cm.tipo_mensaje_id = tm.id
+  JOIN tbl_estados_mensajes em ON cm.id_estado_mensaje = em.id
+  WHERE cm.cita_id = $1
+`;
 
     const mensajesResult = await pool.query(getMensajesQuery, [appointmentId]);
     row.mensajes = mensajesResult.rows;
 
-    const appointment = {
-      id: row.id,
-      fecha_creacion: row.fecha_creacion,
-      fecha_inicio: row.fecha_inicio,
-      fecha_final: row.fecha_final,
-      doctor: {
-        id: row.doctor_id,
-        nombre: row.doctor_nombre,
-        color: {
-          id: row.doctor_color_id,
-          codigo: row.doctor_color_codigo,
-        },
+    // Lógica para construir el objeto doctor
+    row.doctor = {
+      id: row.doctor_id,
+      nombre: row.doctor_nombre,
+      color: {
+        id: row.doctor_color_id,
+        codigo: row.doctor_color_codigo,
       },
-      paciente: {
-        id: row.paciente_id,
-        nombre: row.paciente_nombre,
-        email: row.paciente_email,
-      },
-      estado_cita: {
-        id: row.estado_id,
-        nombre: row.estado_nombre,
-      },
-      google_calendar_event_id: row.google_calendar_event_id,
-      ubicacion: row.ubicacion,
-      descripcion: row.descripcion,
-      notas: row.notas,
-      estado: row.estado,
-      mensajes: row.mensajes,
     };
+    delete row.doctor_id;
+    delete row.doctor_nombre;
+    delete row.doctor_color_id;
+    delete row.doctor_color_codigo;
+
+    row.paciente = {
+      id: row.paciente_id,
+      nombre: row.paciente_nombre,
+      email: row.paciente_email,
+    };
+    delete row.paciente_id;
+    delete row.paciente_nombre;
+    delete row.paciente_email;
+
+    row.mensajes = mensajesResult.rows;
+
+    row.estado = {
+      id: row.estado_id,
+      nombre: row.estado_nombre,
+    };
+    delete row.estado_id;
+    delete row.estado_nombre;
 
     return res.status(200).json({
       ...response,
       succeded: true,
-      data: appointment,
+      data: row,
     });
   } catch (error) {
     return res.status(500).json({

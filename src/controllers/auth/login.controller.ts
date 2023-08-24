@@ -48,7 +48,7 @@ export const loginHandler = async (req: Request, res: Response) => {
     return res.status(200).json({
       ...response,
       message: "Usuario Autenticado con exito",
-      data: { token },
+      data: { token, rol: user.rol },
       succeded: true,
     });
   } catch (error) {

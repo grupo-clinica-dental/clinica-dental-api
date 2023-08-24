@@ -55,6 +55,7 @@ export const getAppointmentsHandler = async (req: Request, res: Response) => {
 
     // Asociamos los mensajes a sus citas correspondientes
     const appointments = citasResult.rows.map((cita) => {
+      // Lógica para construir el objeto doctor
       cita.doctor = {
         id: cita.doctor_id,
         nombre: cita.doctor_nombre,
@@ -68,9 +69,29 @@ export const getAppointmentsHandler = async (req: Request, res: Response) => {
       delete cita.doctor_color_id;
       delete cita.doctor_color_codigo;
 
+      // Lógica para construir el objeto paciente
+      cita.paciente = {
+        id: cita.paciente_id,
+        nombre: cita.paciente_nombre,
+        email: cita.paciente_email,
+      };
+      delete cita.paciente_id;
+      delete cita.paciente_nombre;
+      delete cita.paciente_email;
+
+      // Lógica para asociar los mensajes
       cita.mensajes = mensajesResult.rows.filter(
         (mensaje) => mensaje.cita_id === cita.id
       );
+
+      cita.estado = {
+        id: cita.estado_id,
+        nombre: cita.estado_nombre,
+      };
+
+      delete cita.estado_id;
+      delete cita.estado_nombre;
+
       return cita;
     });
 
