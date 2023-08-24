@@ -1,11 +1,3 @@
--- Active: 1690505574728@@localhost@5432@clinica@public
-
--- Active: 1690505574728@@localhost@5432@clinica_express_types@public
-
--- Active: 1690505574728@@localhost@5432@clinica_express@public
-
-drop DATABASE clinica 
-
 CREATE TABLE
     IF NOT EXISTS tbl_roles (
         id SERIAL PRIMARY KEY,
