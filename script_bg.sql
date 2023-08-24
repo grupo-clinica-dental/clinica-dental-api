@@ -27,7 +27,8 @@ CREATE TABLE
     IF NOT EXISTS tbl_colores (
         id SERIAL PRIMARY KEY,
         codigo VARCHAR(8) NOT NULL,
-        nombre VARCHAR(60) estado BOOLEAN DEFAULT TRUE,
+        nombre VARCHAR(60),
+        estado BOOLEAN DEFAULT TRUE,
         fecha_borrado TIMESTAMP,
     );
 
