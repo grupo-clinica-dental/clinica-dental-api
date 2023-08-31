@@ -29,7 +29,7 @@ CREATE TABLE
         codigo VARCHAR(8) NOT NULL,
         nombre VARCHAR(60),
         estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP,
+        fecha_borrado TIMESTAMP
     );
 
 CREATE TABLE
