@@ -50,8 +50,6 @@ export const getAppointmentById = async (
 
     const citaResult = await pool.query(getCitaQuery, [appointmentId]);
 
-    // ... Otras partes del código ...
-
     const row = citaResult.rows[0];
 
     if (!row) {
@@ -59,22 +57,9 @@ export const getAppointmentById = async (
       return res.status(404).json(response);
     }
 
-    const getMensajesQuery = `
-  SELECT 
-    cm.cita_id,
-    tm.tipo,
-    cm.fecha_programada,
-    em.nombre AS estado_mensaje_nombre
-  FROM tbl_citas_mensajes cm
-  JOIN tbl_tipos_mensajes tm ON cm.tipo_mensaje_id = tm.id
-  JOIN tbl_estados_mensajes em ON cm.id_estado_mensaje = em.id
-  WHERE cm.cita_id = $1
-`;
+    // La línea para obtener los mensajes se ha eliminado o comentado
+    // row.mensajes = mensajesResult.rows;
 
-    const mensajesResult = await pool.query(getMensajesQuery, [appointmentId]);
-    row.mensajes = mensajesResult.rows;
-
-    // Lógica para construir el objeto doctor
     row.doctor = {
       id: row.doctor_id,
       nombre: row.doctor_nombre,
@@ -96,8 +81,6 @@ export const getAppointmentById = async (
     delete row.paciente_id;
     delete row.paciente_nombre;
     delete row.paciente_email;
-
-    row.mensajes = mensajesResult.rows;
 
     row.estado = {
       id: row.estado_id,

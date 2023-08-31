@@ -1,8 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { getNewResponseApi } from "../../libs/create-new-api-response";
 
 import pool from "../../database"; // Importa tu configuración de base de datos
-import { ROLES } from "../../constants/roles";
 
 export const getAppointmentsHandler = async (req: Request, res: Response) => {
   const response = getNewResponseApi();
@@ -38,22 +37,6 @@ export const getAppointmentsHandler = async (req: Request, res: Response) => {
 
     const citasResult = await pool.query(getCitasQuery);
 
-    const getMensajesQuery = `
-      SELECT 
-        cm.cita_id,
-        tm.tipo,
-        cm.fecha_programada,
-        em.nombre AS estado_mensaje_nombre
-      FROM tbl_citas_mensajes cm
-      JOIN tbl_tipos_mensajes tm ON cm.tipo_mensaje_id = tm.id
-      JOIN tbl_estados_mensajes em ON cm.id_estado_mensaje = em.id
-      WHERE cm.cita_id = ANY($1)
-    `;
-
-    const citaIds = citasResult.rows.map((cita) => cita.id);
-    const mensajesResult = await pool.query(getMensajesQuery, [citaIds]);
-
-    // Asociamos los mensajes a sus citas correspondientes
     const appointments = citasResult.rows.map((cita) => {
       // Lógica para construir el objeto doctor
       cita.doctor = {
@@ -78,11 +61,6 @@ export const getAppointmentsHandler = async (req: Request, res: Response) => {
       delete cita.paciente_id;
       delete cita.paciente_nombre;
       delete cita.paciente_email;
-
-      // Lógica para asociar los mensajes
-      cita.mensajes = mensajesResult.rows.filter(
-        (mensaje) => mensaje.cita_id === cita.id
-      );
 
       cita.estado = {
         id: cita.estado_id,
