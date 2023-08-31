@@ -8,6 +8,9 @@ import doctorsRoutes from "./routes/doctors/doctors.routes";
 import rolesRoutes from "./routes/roles/roles.routes";
 import patientsRoutes from "./routes/patients/patients.routes";
 import messagesRoutes from "./routes/messages/messages.routes";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // lo que se exporta por defecto se usa en la ruta
 
@@ -36,6 +39,9 @@ app.use(API_VERSION, doctorsRoutes);
 app.use(API_VERSION, rolesRoutes);
 app.use(API_VERSION, patientsRoutes);
 app.use(API_VERSION, messagesRoutes);
+
+console.log("DB User:", process.env.DB_USER);
+console.log("DB Password:", process.env.DB_PASSWORD);
 
 app.listen(PORT, () => {
   console.log(`started development server: http://localhost:${PORT}/api/v1`);
