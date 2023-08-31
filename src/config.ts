@@ -1,3 +1,7 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 interface ConfigInterface {
   user: string;
   password: string;
@@ -7,11 +11,11 @@ interface ConfigInterface {
 }
 
 export const DB_CONFIG: ConfigInterface = {
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD || "D@ns3r190s",
-  host: process.env.DB_HOST || "localhost",
-  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
-  database: process.env.DB_DATABASE || "clinica",
+  user: process.env.DB_USER || "",
+  password: process.env.DB_PASSWORD || "",
+  host: process.env.DB_HOST || "",
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : undefined,
+  database: process.env.DB_DATABASE || "",
 };
 
 export const CORS_VALID_ORIGIN =
