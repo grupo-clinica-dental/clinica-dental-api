@@ -28,7 +28,10 @@ export const createAppointmentHandler = async (
       ubicacion,
       descripcion,
       notas,
-      mensajes,
+      mensaje_confirmacion,
+      recordatorio1,
+      recordatorio2,
+      agradecimiento,
     } = req.body;
 
     // Validación
@@ -80,18 +83,6 @@ export const createAppointmentHandler = async (
     );
 
     const citaId = result.rows[0].id;
-
-    const fechaInicio = new Date(fecha_inicio);
-    const fechaFinal = new Date(fecha_final);
-
-    const recordatorio1 = new Date(fechaInicio);
-    recordatorio1.setDate(fechaInicio.getDate() - 1);
-
-    const recordatorio2 = new Date(fechaInicio);
-    recordatorio2.setHours(fechaInicio.getHours() - 2);
-
-    const agradecimiento = new Date(fechaFinal);
-    agradecimiento.setMinutes(fechaFinal.getMinutes() + 15);
 
     // const programarMensaje = (mensaje, fecha) => {
     //   cron.schedule(fecha.toISOString(), () => {

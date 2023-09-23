@@ -29,22 +29,19 @@ export const getTemplateByTypes = async (
       });
     }
 
-    const groupedByType = {};
-    for (const row of result.rows) {
-      const tipo = row.tipo;
-      if (!groupedByType[tipo]) {
-        groupedByType[tipo] = [];
-      }
-      groupedByType[tipo].push({
-        id: row.id,
-        contenido: row.contenido,
-      });
-    }
+    // Crea un arreglo de objetos con el contenido y tipo de cada template
+    const templates = result.rows.map((row) => ({
+      id: row.id,
+      contenido: row.contenido,
+      tipo: row.tipo,
+    }));
+
+    console.log(templates);
 
     return res.status(200).json({
       ...response,
       succeded: true,
-      data: groupedByType,
+      data: templates,
     });
   } catch (error) {
     console.error(error);
