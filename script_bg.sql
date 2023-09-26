@@ -1,155 +1,167 @@
+-- Active: 1690505574728@@localhost@5432@clinica_sequelize@public
+
+-- Drop the database, please ensure you truly want to do this
+
+-- drop DATABASE clinica
+
+-- Table clinica_dental_api_type.tbl_roles
+
 CREATE TABLE
     IF NOT EXISTS tbl_roles (
         id SERIAL PRIMARY KEY,
-        nombre VARCHAR(50) NOT NULL,
-        estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP
+        name VARCHAR(50) NOT NULL,
+        status BOOLEAN DEFAULT TRUE,
+        deletion_date TIMESTAMP
     );
 
--- Table clinica_dental_api_type.tbl_usuarios
+-- Table clinica_dental_api_type.tbl_users
 
 CREATE TABLE
-    IF NOT EXISTS tbl_usuarios (
+    IF NOT EXISTS tbl_users (
         id SERIAL PRIMARY KEY,
-        nombre VARCHAR(100) NOT NULL,
+        name VARCHAR(100) NOT NULL,
         email VARCHAR(100) NOT NULL UNIQUE,
-        telefono VARCHAR(15),
+        phone VARCHAR(15),
         password VARCHAR(255) NOT NULL,
-        fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP,
-        id_rol INT REFERENCES tbl_roles(id)
+        creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        status BOOLEAN DEFAULT TRUE,
+        deletion_date TIMESTAMP,
+        role_id INT REFERENCES tbl_roles(id)
     );
 
--- Table clinica_dental_api_type.tbl_doctores
+-- Table clinica_dental_api_type.tbl_colors
 
 CREATE TABLE
-    IF NOT EXISTS tbl_colores (
+    IF NOT EXISTS tbl_colors (
         id SERIAL PRIMARY KEY,
-        codigo VARCHAR(8) NOT NULL,
-        nombre VARCHAR(60),
-        estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP
+        code VARCHAR(8) NOT NULL,
+        name VARCHAR(60) NOT NULL,
+        status BOOLEAN DEFAULT TRUE,
+        deletion_date TIMESTAMP
     );
 
+-- Table clinica_dental_api_type.tbl_doctors
+
 CREATE TABLE
-    IF NOT EXISTS tbl_doctores (
+    IF NOT EXISTS tbl_doctors (
         id SERIAL PRIMARY KEY,
-        nombre VARCHAR(255) NOT NULL,
-        usuario_id INT REFERENCES tbl_usuarios(id) NULL,
-        estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP,
-        id_color INT REFERENCES tbl_colores(id) NOT NULL
+        name VARCHAR(255) NOT NULL,
+        user_id INT REFERENCES tbl_users(id) NULL,
+        status BOOLEAN DEFAULT TRUE,
+        deletion_date TIMESTAMP,
+        color_id INT REFERENCES tbl_colors(id) NOT NULL
     );
 
--- Table clinica_dental_api_type.tbl_pacientes
+-- Table clinica_dental_api_type.tbl_patients
 
 CREATE TABLE
-    IF NOT EXISTS tbl_pacientes (
+    IF NOT EXISTS tbl_patients (
         id SERIAL PRIMARY KEY,
-        nombre VARCHAR(100) NOT NULL,
-        telefono VARCHAR(15) NOT NULL,
+        name VARCHAR(100) NOT NULL,
+        phone VARCHAR(15) NOT NULL,
         email VARCHAR(100) NOT NULL,
-        fecha_nacimiento DATE,
-        estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP
+        birth_date DATE,
+        status BOOLEAN DEFAULT TRUE,
+        deletion_date TIMESTAMP
     );
 
--- Table clinica_dental_api_type.tbl_estados_cita
+-- Table clinica_dental_api_type.tbl_appointment_statuses
 
 CREATE TABLE
-    IF NOT EXISTS tbl_estados_cita (
+    IF NOT EXISTS tbl_appointment_statuses (
         id SERIAL PRIMARY KEY,
-        estado BOOLEAN DEFAULT TRUE,
-        nombre VARCHAR(255) NOT NULL,
-        fecha_borrado TIMESTAMP
+        status BOOLEAN DEFAULT TRUE,
+        name VARCHAR(255) NOT NULL,
+        deletion_date TIMESTAMP
     );
 
--- Table clinica_dental_api_type.tbl_citas
+-- Table clinica_dental_api_type.tbl_appointments
 
 CREATE TABLE
-    IF NOT EXISTS tbl_citas (
+    IF NOT EXISTS tbl_appointments (
         id SERIAL PRIMARY KEY,
-        fecha_creacion TIMESTAMP NOT NULL,
-        doctor_id INT REFERENCES tbl_doctores(id),
-        paciente_id INT REFERENCES tbl_pacientes(id),
-        estado_id INT REFERENCES tbl_estados_cita(id),
+        doctor_id INT REFERENCES tbl_doctors(id),
+        patient_id INT REFERENCES tbl_patients(id),
+        appointment_status_id INT REFERENCES tbl_appointment_statuses(id),
         google_calendar_event_id VARCHAR(255),
-        ubicacion VARCHAR(255),
-        descripcion TEXT,
-        notas TEXT,
-        estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP,
-        fecha_inicio TIMESTAMP NOT NULL,
-        fecha_final TIMESTAMP NOT NULL
+        description TEXT,
+        status BOOLEAN DEFAULT TRUE,
+        start_date TIMESTAMP NOT NULL,
+        end_date TIMESTAMP NOT NULL
     );
 
--- Table clinica_dental_api_type.tbl_especialidades
+-- Table clinica_dental_api_type.tbl_specialties
 
 CREATE TABLE
-    IF NOT EXISTS tbl_especialidades (
+    IF NOT EXISTS tbl_specialties (
         id SERIAL PRIMARY KEY,
-        nombre VARCHAR(50) NOT NULL,
-        estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP
+        name VARCHAR(50) NOT NULL,
+        status BOOLEAN DEFAULT TRUE,
+        deletion_date TIMESTAMP
     );
 
--- Table clinica_dental_api_type.tbl_doctor_especialidades
+-- Table clinica_dental_api_type.tbl_doctor_specialties
 
 CREATE TABLE
-    IF NOT EXISTS tbl_doctor_especialidades (
-        doctor_id INT REFERENCES tbl_doctores(id),
-        especialidad_id INT REFERENCES tbl_especialidades(id),
-        estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP,
-        PRIMARY KEY (doctor_id, especialidad_id)
+    IF NOT EXISTS tbl_doctor_specialties (
+        doctor_id INT REFERENCES tbl_doctors(id),
+        specialty_id INT REFERENCES tbl_specialties(id),
+        status BOOLEAN DEFAULT TRUE,
+        deletion_date TIMESTAMP,
+        PRIMARY KEY (doctor_id, specialty_id)
     );
 
--- Table clinica_dental_api_type.tbl_tipos_mensajes
+-- Table clinica_dental_api_type.tbl_message_types
 
 CREATE TABLE
-    IF NOT EXISTS tbl_tipos_mensajes (
+    IF NOT EXISTS tbl_message_types (
         id SERIAL PRIMARY KEY,
-        tipo VARCHAR(50) NOT NULL,
-        estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP
+        type VARCHAR(50) NOT NULL,
+        status BOOLEAN DEFAULT TRUE,
     );
 
--- Table clinica_dental_api_type.tbl_mensajes
+-- Table clinica_dental_api_type.tbl_messages
 
 CREATE TABLE
-    IF NOT EXISTS tbl_mensajes (
+    IF NOT EXISTS tbl_messages (
         id SERIAL PRIMARY KEY,
-        tipo_mensaje_id INT REFERENCES tbl_tipos_mensajes(id),
-        contenido TEXT NOT NULL,
-        estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP
+        appointment_id INT REFERENCES tbl_appointments(id),
+        user_id INT REFERENCES tbl_users(id),
+        message_type_id INT REFERENCES tbl_message_types(id),
+        sent_status_id INT REFERENCES tbl_message_statuses(id),
+        content TEXT NOT NULL,
+        status BOOLEAN DEFAULT TRUE,
     );
 
-CREATE TABLE
-    IF NOT EXISTS tbl_estados_mensajes (
-        id SERIAL PRIMARY KEY,
-        nombre VARCHAR(60) NOT NULL
-    );
+-- Table for message statuses
 
 CREATE TABLE
-    IF NOT EXISTS tbl_citas_mensajes (
+    IF NOT EXISTS tbl_message_statuses (
         id SERIAL PRIMARY KEY,
-        cita_id INT REFERENCES tbl_citas(id),
-        tipo_mensaje_id INT REFERENCES tbl_tipos_mensajes(id),
-        fecha_programada TIMESTAMP,
-        -- la fecha en la que se debería enviar el mensaje
-        estado BOOLEAN DEFAULT TRUE,
-        -- si el mensaje aún está activo para ser enviado
-        id_estado_mensaje INT REFERENCES tbl_estados_mensajes(id),
-        fecha_borrado TIMESTAMP
+        name VARCHAR(60) NOT NULL,
+        status BOOLEAN DEFAULT TRUE,
     );
 
+-- Table for scheduled messages associated with appointments
+
 CREATE TABLE
-    IF NOT EXISTS tbl_mensajes_templates (
+    IF NOT EXISTS tbl_appointment_messages (
         id SERIAL PRIMARY KEY,
-        tipo_mensaje_id INT REFERENCES tbl_tipos_mensajes(id),
-        contenido TEXT NOT NULL,
-        estado BOOLEAN DEFAULT TRUE,
-        fecha_borrado TIMESTAMP
+        appointment_id INT REFERENCES tbl_appointments(id),
+        message_type_id INT REFERENCES tbl_message_types(id),
+        scheduled_date TIMESTAMP,
+        status BOOLEAN DEFAULT TRUE,
+        message_status_id INT REFERENCES tbl_message_statuses(id),
+        deletion_date TIMESTAMP
+    );
+
+-- Table for predefined message templates
+
+CREATE TABLE
+    IF NOT EXISTS tbl_message_templates (
+        id SERIAL PRIMARY KEY,
+        message_type_id INT REFERENCES tbl_message_types(id),
+        content TEXT NOT NULL,
+        status BOOLEAN DEFAULT TRUE,
+        deletion_date TIMESTAMP
     );

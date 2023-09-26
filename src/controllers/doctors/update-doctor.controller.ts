@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import pool from "../../database"; // Asumo que estás usando un pool para la conexión a la base de datos.
 import { getNewResponseApi } from "../../libs/create-new-api-response";
 
 export const updateDoctor = async (
@@ -32,7 +31,7 @@ export const updateDoctor = async (
       WHERE id = $3
     `;
 
-    await pool.query(updateQuery, [nombre, id_color, doctorId]);
+    // await pool.query(updateQuery, [nombre, id_color, doctorId]);
 
     return res.status(200).json({
       ...response,

@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { getNewResponseApi } from "../../libs/create-new-api-response";
-import pool from "../../database";
 
 export const deleteUser = async (
   req: Request,

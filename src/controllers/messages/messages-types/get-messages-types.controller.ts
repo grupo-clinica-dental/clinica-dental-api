@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import pool from "../../../database";
 import { getNewResponseApi } from "../../../libs/create-new-api-response";
 
 export const getAllTypes = async (
@@ -11,12 +10,12 @@ export const getAllTypes = async (
 
   try {
     const query = "SELECT * FROM tbl_tipos_mensajes WHERE estado = TRUE";
-    const result = await pool.query(query);
+    // const result = await pool.query(query);
 
     return res.status(200).json({
       ...response,
       succeded: true,
-      data: result.rows,
+      // data: result.rows,
     });
   } catch (error) {
     console.error(error);

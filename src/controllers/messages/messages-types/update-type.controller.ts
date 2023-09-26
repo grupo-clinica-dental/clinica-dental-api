@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { getNewResponseApi } from "../../../libs/create-new-api-response";
-import pool from "../../../database";
 
 export const updateType = async (
   req: Request,
@@ -22,14 +21,14 @@ export const updateType = async (
     // Verificar si existe otro tipo con el mismo nombre
     const checkTypeQuery =
       "SELECT * FROM tbl_tipos_mensajes WHERE tipo = $1 AND estado = TRUE AND id != $2";
-    const checkTypeResult = await pool.query(checkTypeQuery, [tipo, typeId]);
+    // const checkTypeResult = await pool.query(checkTypeQuery, [tipo, typeId]);
 
-    if (checkTypeResult.rowCount > 0) {
-      return res.status(400).json({
-        ...response,
-        message: "Ya existe un tipo de mensaje con ese nombre.",
-      });
-    }
+    // if (checkTypeResult.rowCount > 0) {
+    //   return res.status(400).json({
+    //     ...response,
+    //     message: "Ya existe un tipo de mensaje con ese nombre.",
+    //   });
+    // }
 
     // Actualizar el tipo en la base de datos
     const updateQuery = `
@@ -38,20 +37,20 @@ export const updateType = async (
       WHERE id = $2
       RETURNING id, tipo
     `;
-    const updatedType = await pool.query(updateQuery, [tipo, typeId]);
+    // const updatedType = await pool.query(updateQuery, [tipo, typeId]);
 
-    if (updatedType.rowCount === 0) {
-      return res.status(404).json({
-        ...response,
-        message: "Tipo de mensaje no encontrado.",
-      });
-    }
+    // if (updatedType.rowCount === 0) {
+    //   return res.status(404).json({
+    //     ...response,
+    //     message: "Tipo de mensaje no encontrado.",
+    //   });
+    // }
 
     return res.status(200).json({
       ...response,
       succeded: true,
       message: "Tipo de mensaje actualizado exitosamente.",
-      data: updatedType.rows[0],
+      // data: updatedType.rows[0],
     });
   } catch (error) {
     console.error(error);

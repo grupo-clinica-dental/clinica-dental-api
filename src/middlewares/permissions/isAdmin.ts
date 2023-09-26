@@ -15,13 +15,13 @@ export const isAdmin = async (
   try {
     const user = req.user;
 
-    if (user.rol === ROLES.ADMIN) {
+    if (user.rol.name === ROLES.ADMIN) {
       next();
       return;
     }
     return res
       .status(403)
-      .json({ ...response, message: "No tiene permisos de administrador" });
+      .json({ ...response, message: "No tiene permisos para acceder" });
   } catch (error) {
     return res.status(500).json({
       ...response,

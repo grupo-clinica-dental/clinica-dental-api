@@ -1,6 +1,6 @@
+import { getNewResponseApi } from "@/libs/create-new-api-response";
+import { Rol } from "@/models/init-models";
 import { Request, Response, NextFunction } from "express";
-import pool from "../../database";
-import { getNewResponseApi } from "../../libs/create-new-api-response";
 
 export const updateRole = async (
   req: Request,
@@ -9,10 +9,10 @@ export const updateRole = async (
 ) => {
   const response = getNewResponseApi();
   const roleId = req.params.id;
-  const { nombre } = req.body;
+  const { name } = req.body;
 
   try {
-    if (!nombre || !roleId) {
+    if (!name || !roleId) {
       return res.status(400).json({
         ...response,
         message: "El nombre del rol y el ID son requeridos.",
@@ -20,24 +20,22 @@ export const updateRole = async (
     }
 
     // Verificamos primero si el rol existe y está activo
-    const checkRoleQuery =
-      "SELECT * FROM tbl_roles WHERE id = $1 AND estado = TRUE";
-    const checkRoleResult = await pool.query(checkRoleQuery, [roleId]);
+    const rolToUpdate = await Rol.findOne({
+      where: {
+        id: roleId,
+        status: true,
+      },
+    });
 
-    if (checkRoleResult.rowCount === 0) {
+    if (!rolToUpdate) {
       return res.status(404).json({
         ...response,
-        message: "Rol no encontrado.",
+        message: "Rol no encontrado o ya ha sido eliminado.",
       });
     }
 
-    // Actualizamos el rol
-    const updateQuery = `
-      UPDATE tbl_roles
-      SET nombre = $1
-      WHERE id = $2
-    `;
-    await pool.query(updateQuery, [nombre, roleId]);
+    rolToUpdate.name = name;
+    rolToUpdate.save();
 
     return res.status(200).json({
       ...response,

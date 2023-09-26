@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { getNewResponseApi } from "../../libs/create-new-api-response";
-import pool from "../../database";
 
 export const updateUserHandler = async (
   req: Request,
@@ -30,17 +29,17 @@ export const updateUserHandler = async (
   const { email, nombre, telefono, id_rol } = req.body;
 
   try {
-    const userCheck = await pool.query(
-      "SELECT id FROM tbl_usuarios WHERE id = $1",
-      [userId]
-    );
+    // const userCheck = await pool.query(
+    //   "SELECT id FROM tbl_usuarios WHERE id = $1",
+    //   [userId]
+    // );
 
-    if (userCheck.rows.length === 0) {
-      return res.status(404).json({
-        ...response,
-        message: "Usuario no encontrado.",
-      });
-    }
+    // if (userCheck.rows.length === 0) {
+    //   return res.status(404).json({
+    //     ...response,
+    //     message: "Usuario no encontrado.",
+    //   });
+    // }
 
     // Actualizar datos del usuario
     const query = `
@@ -52,7 +51,7 @@ export const updateUserHandler = async (
           WHERE id = $5
         `;
 
-    await pool.query(query, [email, nombre, telefono, id_rol, userId]);
+    // await pool.query(query, [email, nombre, telefono, id_rol, userId]);
 
     return res.status(200).json({
       ...response,

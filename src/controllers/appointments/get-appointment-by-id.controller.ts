@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { getNewResponseApi } from "../../libs/create-new-api-response";
-import pool from "../../database";
 
 export const getAppointmentById = async (
   req: Request,

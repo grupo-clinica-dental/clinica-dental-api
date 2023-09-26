@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { ROLES } from "../../constants/roles";
-import { getNewResponseApi } from "../../libs/create-new-api-response";
+import { getNewResponseApi } from "@/libs/create-new-api-response";
+import { ROLES } from "@/constants/roles";
 
 export const isAdminOrDoctor = async (
   req: Request,
@@ -21,7 +21,7 @@ export const isAdminOrDoctor = async (
       });
     }
 
-    if (validRoles.includes(user.rol)) {
+    if (validRoles.includes(user.rol.name)) {
       next();
       return;
     }

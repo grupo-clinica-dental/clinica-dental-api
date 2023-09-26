@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import pool from "../../database";
 import { getNewResponseApi } from "../../libs/create-new-api-response";
 
 export const getAllDoctors = async (
@@ -22,37 +21,37 @@ export const getAllDoctors = async (
         JOIN tbl_colores c ON d.id_color = c.id
       `;
 
-    const doctorsResult = await pool.query(getDoctorsQuery);
+    // const doctorsResult = await pool.query(getDoctorsQuery);
 
-    for (const doctor of doctorsResult.rows) {
-      const getEspecialidadesQuery = `
-          SELECT e.id, e.nombre
-          FROM tbl_doctor_especialidades de
-          JOIN tbl_especialidades e ON de.especialidad_id = e.id
-          WHERE de.doctor_id = $1
-        `;
+    // for (const doctor of doctorsResult.rows) {
+    //   const getEspecialidadesQuery = `
+    //       SELECT e.id, e.nombre
+    //       FROM tbl_doctor_especialidades de
+    //       JOIN tbl_especialidades e ON de.especialidad_id = e.id
+    //       WHERE de.doctor_id = $1
+    //     `;
 
-      const especialidadesResult = await pool.query(getEspecialidadesQuery, [
-        doctor.doctor_id,
-      ]);
-      doctor.especialidades = especialidadesResult.rows;
-    }
+    //   const especialidadesResult = await pool.query(getEspecialidadesQuery, [
+    //     doctor.doctor_id,
+    //   ]);
+    //   doctor.especialidades = especialidadesResult.rows;
+    // }
 
-    const doctors = doctorsResult.rows.map((row) => ({
-      id: row.doctor_id,
-      nombre: row.doctor_nombre,
-      email: row.doctor_email,
-      color: {
-        id: row.color_id,
-        codigo: row.doctor_color,
-      },
-      especialidades: row.especialidades,
-    }));
+    // const doctors = doctorsResult.rows.map((row) => ({
+    //   id: row.doctor_id,
+    //   nombre: row.doctor_nombre,
+    //   email: row.doctor_email,
+    //   color: {
+    //     id: row.color_id,
+    //     codigo: row.doctor_color,
+    //   },
+    //   especialidades: row.especialidades,
+    // }));
 
     return res.status(200).json({
       ...response,
       succeded: true,
-      data: doctors,
+      // data: doctors,
     });
   } catch (error) {
     console.error(error);

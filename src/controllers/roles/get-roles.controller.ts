@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import pool from "../../database";
-import { getNewResponseApi } from "../../libs/create-new-api-response";
+import { Rol } from "@/models/init-models";
+import { getNewResponseApi } from "@/libs/create-new-api-response";
 
 export const getAllRoles = async (
   req: Request,
@@ -10,13 +10,24 @@ export const getAllRoles = async (
   const response = getNewResponseApi();
 
   try {
-    const query = "SELECT * FROM tbl_roles WHERE estado = TRUE";
-    const result = await pool.query(query);
+    const roles = await Rol.findAll({
+      where: {
+        status: true,
+      },
+    });
+
+    if (!roles) {
+      return res.status(404).json({
+        ...response,
+        message: "No se encontraron roles.",
+        data: [],
+      });
+    }
 
     return res.status(200).json({
       ...response,
       succeded: true,
-      data: result.rows,
+      data: roles,
     });
   } catch (error) {
     console.error(error);

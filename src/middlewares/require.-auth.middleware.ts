@@ -1,3 +1,4 @@
+import { getNewResponseApi } from "@/libs/create-new-api-response";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
@@ -8,12 +9,7 @@ export const requireAuth = (
 ) => {
   const authHeader = req.headers.authorization;
 
-  const response: ApiResponse<any> = {
-    data: {},
-    errors: null,
-    message: "",
-    succeded: false,
-  };
+  const response = getNewResponseApi();
 
   // debe ir en los headers de la solicitud
 
@@ -37,7 +33,9 @@ export const requireAuth = (
 
   // si solo viene el bearer sin el token no pasara
 
-  jwt.verify(token, "secret", (err, user) => {
+  const TOKEN_SECRET = process.env.TOKEN_SECRET || "secret";
+
+  jwt.verify(token, TOKEN_SECRET, (err, user) => {
     if (err)
       return res.status(401).json({
         ...response,

@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { getNewResponseApi } from "../../../libs/create-new-api-response";
-import pool from "../../../database";
 
 export const updateAppointmentStatus = async (
   req: Request,
@@ -23,28 +22,28 @@ export const updateAppointmentStatus = async (
 
   try {
     // Verificar si el estado de cita existe
-    const verificationResult = await pool.query(
-      "SELECT * FROM tbl_estados_cita WHERE id = $1",
-      [statusId]
-    );
+    // const verificationResult = await pool.query(
+    //   "SELECT * FROM tbl_estados_cita WHERE id = $1",
+    //   [statusId]
+    // );
 
-    if (verificationResult.rows.length === 0) {
-      return res.status(404).json({
-        ...response,
-        message: "Estado de cita no encontrado.",
-      });
-    }
+    // if (verificationResult.rows.length === 0) {
+    //   return res.status(404).json({
+    //     ...response,
+    //     message: "Estado de cita no encontrado.",
+    //   });
+    // }
 
     // Realizar la actualización
-    await pool.query(
-      `
-        UPDATE tbl_estados_cita 
-        SET nombre = COALESCE($1, nombre), 
-            estado = COALESCE($2, estado)
-        WHERE id = $3
-      `,
-      [nombre, estado, statusId]
-    );
+    // await pool.query(
+    //   `
+    //     UPDATE tbl_estados_cita
+    //     SET nombre = COALESCE($1, nombre),
+    //         estado = COALESCE($2, estado)
+    //     WHERE id = $3
+    //   `,
+    //   [nombre, estado, statusId]
+    // );
 
     return res.status(200).json({
       ...response,

@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { getNewResponseApi } from "../../libs/create-new-api-response";
 
-import pool from "../../database"; // Importa tu configuración de base de datos
-
 export const getAppointmentsHandler = async (req: Request, res: Response) => {
   const response = getNewResponseApi();
 

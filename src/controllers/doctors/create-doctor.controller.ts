@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import pool from "../../database";
 import { getNewResponseApi } from "../../libs/create-new-api-response";
 
 export const createDoctor = async (
@@ -32,12 +31,12 @@ export const createDoctor = async (
             VALUES ($1, $2, $3) RETURNING id;
         `;
 
-    const doctorResult = await pool.query(insertDoctorQuery, [
-      nombre,
-      usuario_id,
-      id_color,
-    ]);
-    const doctorId = doctorResult.rows[0].id;
+    // const doctorResult = await pool.query(insertDoctorQuery, [
+    //   nombre,
+    //   usuario_id,
+    //   id_color,
+    // ]);
+    // const doctorId = doctorResult.rows[0].id;
 
     // Asociar las especialidades al doctor
     for (const especialidadId of especialidades) {
@@ -46,14 +45,14 @@ export const createDoctor = async (
                 VALUES ($1, $2);
             `;
 
-      await pool.query(insertEspecialidadQuery, [doctorId, especialidadId]);
+      // await pool.query(insertEspecialidadQuery, [doctorId, especialidadId]);
     }
 
     return res.status(201).json({
       ...response,
       succeded: true,
       message: "Doctor creado con éxito.",
-      data: { id: doctorId },
+      // data: { id: doctorId },
     });
   } catch (error) {
     console.error(error);

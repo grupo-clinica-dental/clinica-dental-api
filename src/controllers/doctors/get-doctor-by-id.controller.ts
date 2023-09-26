@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import pool from "../../database"; // Asumo que estás usando un pool para la conexión a la base de datos.
 import { getNewResponseApi } from "../../libs/create-new-api-response";
 
 // Función para obtener un doctor por su ID
@@ -33,29 +32,29 @@ export const getDoctorById = async (
       WHERE d.id = $1
     `;
 
-    const doctorResult = await pool.query(getDoctorQuery, [doctorId]);
+    // const doctorResult = await pool.query(getDoctorQuery, [doctorId]);
 
-    const row = doctorResult.rows[0];
+    // const row = doctorResult.rows[0];
 
-    if (!row) {
-      response.message = "Doctor no encontrado.";
-      return res.status(404).json(response);
-    }
+    // if (!row) {
+    //   response.message = "Doctor no encontrado.";
+    //   return res.status(404).json(response);
+    // }
 
-    const doctor = {
-      id: row.doctor_id,
-      nombre: row.doctor_nombre,
-      email: row.doctor_email,
-      color: {
-        id: row.color_id,
-        codigo: row.doctor_color,
-      },
-    };
+    // const doctor = {
+    //   id: row.doctor_id,
+    //   nombre: row.doctor_nombre,
+    //   email: row.doctor_email,
+    //   color: {
+    //     id: row.color_id,
+    //     codigo: row.doctor_color,
+    //   },
+    // };
 
     return res.status(200).json({
       ...response,
       succeded: true,
-      data: doctor,
+      // data: doctor,
     });
   } catch (error) {
     console.error(error);

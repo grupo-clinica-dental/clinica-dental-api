@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { getNewResponseApi } from "../../../libs/create-new-api-response";
-import pool from "../../../database";
 
 export const getAppointmentStatusById = async (
   req: Request,
@@ -21,23 +20,23 @@ export const getAppointmentStatusById = async (
     }
 
     // Consulta para obtener el estado de cita por su ID
-    const result = await pool.query(
-      "SELECT id, nombre FROM tbl_estados_cita WHERE id = $1 AND estado = TRUE",
-      [statusId]
-    );
+    // const result = await pool.query(
+    //   "SELECT id, nombre FROM tbl_estados_cita WHERE id = $1 AND estado = TRUE",
+    //   [statusId]
+    // );
 
     // Si no se encuentra el estado, retorna un error
-    if (result.rows.length === 0) {
-      return res.status(404).json({
-        ...response,
-        message: "Estado de cita no encontrado.",
-      });
-    }
+    // if (result.rows.length === 0) {
+    //   return res.status(404).json({
+    //     ...response,
+    //     message: "Estado de cita no encontrado.",
+    //   });
+    // }
 
     // Si todo va bien, retorna el estado de cita
     return res.status(200).json({
       ...response,
-      data: result.rows[0],
+      // data: result.rows[0],
       message: "Estado de cita obtenido con éxito.",
     });
   } catch (error) {

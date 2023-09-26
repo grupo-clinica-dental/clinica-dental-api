@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import pool from "../../../database";
 import { getNewResponseApi } from "../../../libs/create-new-api-response";
 
 export const deleteTemplate = async (

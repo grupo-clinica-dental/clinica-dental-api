@@ -1,60 +1,63 @@
 import { Request, Response } from "express";
-import jwt, { TokenExpiredError } from "jsonwebtoken";
-import pool from "../../database";
-import { getNewResponseApi } from "../../libs/create-new-api-response";
+import { User } from "@models/users/user.model";
+import { getNewResponseApi } from "@/libs/create-new-api-response";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export const loginHandler = async (req: Request, res: Response) => {
-  const response = getNewResponseApi<string>();
+  const response = getNewResponseApi();
 
   try {
     const { email, password } = req.body;
 
-    const query = `
-      SELECT u.id, u.email, u.password, u.nombre, u.telefono, u.estado, r.nombre as rol
-      FROM tbl_usuarios u
-      INNER JOIN tbl_roles r ON u.id_rol = r.id
-      WHERE u.email = $1`;
-    const values = [email];
-    const result = await pool.query(query, values);
+    const userToFind = await User.findOne({
+      attributes: ["id", "email", "name", "phone", "status", "password"],
+      where: {
+        email,
+      },
+      include: ["role"],
+    });
 
-    if (result.rows.length <= 0) {
-      return res
-        .status(401)
-        .json({ ...response, message: "No Autorizado para obtener el perfil" });
+    if (!userToFind) {
+      return res.status(404).json({
+        message: "Credenciales incorrectas",
+      });
     }
 
-    const user = result.rows[0];
-    // Verifica la contraseña (asumiendo que es en texto plano, lo cual no es seguro. Deberías cifrarla.)
-    if (user.password !== password) {
-      return res
-        .status(401)
-        .json({ ...response, message: "Contraseña incorrecta" });
+    const validPassword = await bcrypt.compare(password, userToFind.password);
+
+    if (!validPassword) {
+      return res.status(404).json({
+        message: "Credenciales incorrectas",
+      });
     }
 
-    // Crear el payload del token sin incluir la contraseña
     const tokenPayload = {
-      id: user.id,
-      email: user.email,
-      nombre: user.nombre,
-      telefono: user.telefono,
-      estado: user.estado,
-      rol: user.rol,
+      id: userToFind?.id,
+      email: userToFind?.email,
+      nombre: userToFind?.name,
+      telefono: userToFind?.phone,
+      estado: userToFind?.status,
+      rol: userToFind?.role,
     };
 
-    const token: string = jwt.sign(tokenPayload, "secret", {
-      expiresIn: 60 * 60 * 24,
+    const TOKENSECRET = process.env.TOKEN_SECRET || "secret";
+
+    const token: string = jwt.sign(tokenPayload, TOKENSECRET, {
+      expiresIn: "8h",
     });
 
     return res.status(200).json({
-      ...response,
       message: "Usuario Autenticado con exito",
-      data: { token, rol: user.rol },
+      data: {
+        token,
+        profile: tokenPayload,
+      },
       succeded: true,
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      ...response,
       message: "Problema en el autenticar en el lado del servidor",
     });
   }

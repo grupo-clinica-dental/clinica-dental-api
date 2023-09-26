@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { getNewResponseApi } from "../../libs/create-new-api-response";
-import pool from "../../database";
+import { Rol } from "@/models/init-models";
+import { getNewResponseApi } from "@/libs/create-new-api-response";
 
 export const deleteRole = async (
   req: Request,
@@ -18,20 +18,29 @@ export const deleteRole = async (
       });
     }
 
-    const query = `
-      UPDATE tbl_roles
-      SET estado = FALSE, fecha_borrado = CURRENT_TIMESTAMP
-      WHERE id = $1 AND estado = TRUE
-    `;
+    const roleExists = await Rol.findOne({
+      where: {
+        id: roleId,
+      },
+    });
 
-    const result = await pool.query(query, [roleId]);
-
-    if (result.rowCount === 0) {
+    if (roleExists) {
       return res.status(404).json({
         ...response,
         message: "Rol no encontrado o ya ha sido eliminado.",
       });
     }
+
+    await Rol.update(
+      {
+        status: false,
+      },
+      {
+        where: {
+          id: roleId,
+        },
+      }
+    );
 
     return res.status(200).json({
       ...response,
@@ -39,11 +48,11 @@ export const deleteRole = async (
       message: "Rol eliminado exitosamente.",
     });
   } catch (error) {
-    console.error(error);
+    console.log(error);
+
     return res.status(500).json({
       ...response,
       message: "Error al eliminar el rol.",
-      errors: [error],
     });
   }
 };
