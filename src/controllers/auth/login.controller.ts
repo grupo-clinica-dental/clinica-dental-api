@@ -1,43 +1,64 @@
 import { Request, Response } from "express";
+import { User } from "@models/users/user.model";
+import { getNewResponseApi } from "@/libs/create-new-api-response";
 import jwt from "jsonwebtoken";
-import pool from "../../database";
+import bcrypt from "bcrypt";
 
 export const loginHandler = async (req: Request, res: Response) => {
-  // recibimos datos procesamos el request body
-  // body = {email: ???, password: ???}
-  //// VALIDACIONES manuales o con librerias como express generator, zod etc
-  //Store in database
-  //GENERATE TOKEN
-  console.log(req.body);
+  const response = getNewResponseApi();
 
   try {
     const { email, password } = req.body;
 
-    const query =
-      "SELECT * FROM tbl_usuarios WHERE email = $1 AND password = $2";
-    const values = [email, password];
-    const result = await pool.query(query, values);
+    const userToFind = await User.findOne({
+      attributes: ["id", "email", "name", "phone", "status", "password"],
+      where: {
+        email,
+      },
+      include: ["role"],
+    });
 
-    if (result.rows.length <= 0) {
-      return res.status(401).json({ message: "Unathorized" });
+    if (!userToFind) {
+      return res.status(404).json({
+        message: "Credenciales incorrectas",
+      });
     }
 
-    const token = jwt.sign(
-      {
-        email: email,
-        password: password,
-      },
-      "secret",
-      {
-        expiresIn: 60 * 60 * 24,
-      }
-    );
+    const validPassword = await bcrypt.compare(password, userToFind.password);
 
-    return res.json({ token });
+    if (!validPassword) {
+      return res.status(404).json({
+        message: "Credenciales incorrectas",
+      });
+    }
+
+    const tokenPayload = {
+      id: userToFind?.id,
+      email: userToFind?.email,
+      nombre: userToFind?.name,
+      telefono: userToFind?.phone,
+      estado: userToFind?.status,
+      rol: userToFind?.role,
+    };
+
+    const TOKENSECRET = process.env.TOKEN_SECRET || "secret";
+
+    const token: string = jwt.sign(tokenPayload, TOKENSECRET, {
+      expiresIn: "8h",
+    });
+
+    return res.status(200).json({
+      message: "Usuario Autenticado con exito",
+      data: {
+        token,
+        profile: tokenPayload,
+      },
+      succeded: true,
+    });
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({ message: "Somethin went wrong on the server side" });
+    return res.status(500).json({
+      message: "Problema en el autenticar en el lado del servidor",
+    });
   }
 };

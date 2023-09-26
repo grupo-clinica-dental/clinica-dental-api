@@ -1,9 +1,24 @@
 import express, { Application } from "express";
-import testRoutes from "./routes/test";
-import authRoutes from "./routes/auth.routes";
+import "module-alias/register";
+// import authRoutes from "./routes/auth/auth.routes";
+// import googleCalendarRoutes from "./routes/google/google-calendar.routes";
+// import apoointmentsRoutes from "./routes/appointments/appointments.routes";
+// import userRoutes from "./routes/users/users.routes";
+// import specialtiesRoutes from "./routes/specialties/doctors-specialties.routes";
+// import doctorsRoutes from "./routes/doctors/doctors.routes";
+// import rolesRoutes from "./routes/roles/roles.routes";
+// import patientsRoutes from "./routes/patients/patients.routes";
+// import messagesRoutes from "./routes/messages/messages.routes";+
+import authRoutes from "@/routes/auth/auth.routes";
+import dotenv from "dotenv";
 import cors from "cors";
-import { CORS_VALID_ORIGIN } from "./config";
-const apiVersion = "/api/v1";
+import sequelize, { CORS_VALID_ORIGIN, PORT } from "@/config";
+import * as models from "@/models/init-models";
+import rolesRoutes from "@/routes/roles/roles.routes";
+
+const API_VERSION = "/api/v1";
+
+dotenv.config();
 
 const app: Application = express();
 
@@ -16,11 +31,37 @@ app.use(
   })
 );
 
-app.use(apiVersion, testRoutes);
-app.use(apiVersion, authRoutes);
+// usamos las rutas definidas arriba que estan en nuestro archivo de routes
+app.use(API_VERSION, authRoutes);
+// app.use(API_VERSION, googleCalendarRoutes);
+// app.use(API_VERSION, apoointmentsRoutes);
+// app.use(API_VERSION, userRoutes);
+// app.use(API_VERSION, specialtiesRoutes);
+// app.use(API_VERSION, doctorsRoutes);
+app.use(API_VERSION, rolesRoutes);
+// app.use(API_VERSION, patientsRoutes);
+// app.use(API_VERSION, messagesRoutes);
 
-const port = 4000;
+async function main() {
+  await sequelize.authenticate();
+  models;
+  await sequelize.sync({ force: true });
 
-app.listen(port, () => {
-  console.log(`started development server: http://localhost:${port}/api/v1`);
-});
+  const rol = await models.Rol.create({
+    name: "Admin",
+  });
+
+  const user = await models.User.create({
+    email: "test@test.com",
+    name: "test",
+    password: "test",
+    phone: "123456789",
+    role_id: 1,
+  });
+
+  app.listen(PORT, () => {
+    console.log(`started development server: http://localhost:${PORT}/api/v1`);
+  });
+}
+
+main();
