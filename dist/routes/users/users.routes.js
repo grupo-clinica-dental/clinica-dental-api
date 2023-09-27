@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const require__auth_middleware_1 = require("../../middlewares/require.-auth.middleware");
+const isAdmin_1 = require("../../middlewares/permissions/isAdmin");
+const get_users_controller_1 = require("../../controllers/users/get-users.controller");
+const get_user_by_id_1 = require("../../controllers/users/get-user-by-id");
+const delete_user_controller_1 = require("../../controllers/users/delete-user.controller");
+const update_user_controller_1 = require("../../controllers/users/update-user.controller");
+const create_user_controller_1 = require("../../controllers/users/create-user.controller");
+const router = (0, express_1.Router)();
+router.get("/users", [require__auth_middleware_1.requireAuth, isAdmin_1.isAdmin], get_users_controller_1.getUsersHandler);
+router.get("/users/:id", [require__auth_middleware_1.requireAuth, isAdmin_1.isAdmin], get_user_by_id_1.getUserById);
+router.delete("/users/:id", [require__auth_middleware_1.requireAuth, isAdmin_1.isAdmin], delete_user_controller_1.deleteUser);
+router.put("/users/:id", [require__auth_middleware_1.requireAuth, isAdmin_1.isAdmin], update_user_controller_1.updateUserHandler);
+router.post("/users", [require__auth_middleware_1.requireAuth, isAdmin_1.isAdmin], create_user_controller_1.createUserHandler);
+exports.default = router;

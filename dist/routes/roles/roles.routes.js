@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const require__auth_middleware_1 = require("../../middlewares/require.-auth.middleware");
+const isAdmin_1 = require("../../middlewares/permissions/isAdmin");
+const get_roles_controller_1 = require("../../controllers/roles/get-roles.controller");
+const get_role_by_id_controller_1 = require("../../controllers/roles/get-role-by-id.controller");
+const delete_role_controller_1 = require("../../controllers/roles/delete-role.controller");
+const update_role_controller_1 = require("../../controllers/roles/update-role.controller");
+const create_role_controller_1 = require("../../controllers/roles/create-role.controller");
+const isAdminOrDoctor_1 = require("../../middlewares/permissions/isAdminOrDoctor");
+const router = (0, express_1.Router)();
+router.get("/roles", [require__auth_middleware_1.requireAuth, isAdminOrDoctor_1.isAdminOrDoctor], get_roles_controller_1.getAllRoles);
+router.get("/roles/:id", [require__auth_middleware_1.requireAuth, isAdmin_1.isAdmin], get_role_by_id_controller_1.getRoleById);
+router.delete("/roles/:id", [require__auth_middleware_1.requireAuth, isAdmin_1.isAdmin], delete_role_controller_1.deleteRole);
+router.put("/roles/:id", [require__auth_middleware_1.requireAuth, isAdmin_1.isAdmin], update_role_controller_1.updateRole);
+router.post("/roles", [require__auth_middleware_1.requireAuth, isAdmin_1.isAdmin], create_role_controller_1.createRole);
+exports.default = router;

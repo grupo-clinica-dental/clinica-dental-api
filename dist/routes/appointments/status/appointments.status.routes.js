@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const get_appointments_status_controller_1 = require("../../../controllers/appointments/status/get-appointments-status.controller");
+const require__auth_middleware_1 = require("../../../middlewares/require.-auth.middleware");
+const isAdminOrDoctor_1 = require("../../../middlewares/permissions/isAdminOrDoctor");
+const isAdmin_1 = require("../../../middlewares/permissions/isAdmin");
+const get_appointments_status_by_id_controller_1 = require("../../../controllers/appointments/status/get-appointments-status-by-id.controller");
+const create_appointment_status_controller_1 = require("../../../controllers/appointments/status/create-appointment-status.controller");
+const delete_appointment_status_controller_1 = require("../../../controllers/appointments/status/delete-appointment-status.controller");
+const update_appointment_status_controller_1 = require("../../../controllers/appointments/status/update-appointment-status.controller");
+const router = (0, express_1.Router)();
+router.get("/status", [require__auth_middleware_1.requireAuth, isAdminOrDoctor_1.isAdminOrDoctor], get_appointments_status_controller_1.getAllAppointmentStatuses);
+router.post("/status", [require__auth_middleware_1.requireAuth, isAdmin_1.isAdmin], create_appointment_status_controller_1.createAppointmentStatus);
+router.get("/status/:id", [require__auth_middleware_1.requireAuth, isAdminOrDoctor_1.isAdminOrDoctor], get_appointments_status_by_id_controller_1.getAppointmentStatusById);
+router.delete("/status/:id", [require__auth_middleware_1.requireAuth, isAdmin_1.isAdmin], delete_appointment_status_controller_1.deleteAppointmentStatus);
+router.put("/status/:id", [require__auth_middleware_1.requireAuth, isAdminOrDoctor_1.isAdminOrDoctor], update_appointment_status_controller_1.updateAppointmentStatus);
+exports.default = router;
